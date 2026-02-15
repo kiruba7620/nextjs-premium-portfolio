@@ -20,31 +20,27 @@ export default function Contact(){
       setLoading(true);
 
       const res = await fetch('/api/contact',{
-  method:'POST',
-  headers:{'Content-Type':'application/json'},
-  body:JSON.stringify(form)
-});
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(form)
+      });
 
-let data;
-try {
-  data = await res.json();
-} catch {
-  data = null;
-}
-
+      const data = await res.json();
 
       if(res.ok && data.success){
-        toast.success(data?.success||"Message sent successfully ");
+        toast.success("Message sent successfully ");
 
         // reset form
         setForm({name:'',email:'',message:''});
 
       } else {
-        toast.error(data?.error || "Failed to send message");
+        toast.error("Failed to send message");
       }
 
-    }
-    finally{
+    }catch(err){
+      console.error(err);
+      toast.error("Server error. Try again later");
+    }finally{
       setLoading(false);
     }
   }
